@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Kehadiran Siswa - SMA NEGERI 1 TARAKAN</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --danger-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #2c3e50;
+            --gray-color: #95a5a6;
+            --border-radius: 10px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1a3a5f 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-container {
+            text-align: center;
+            width: 100%;
+        }
+
+        .header-content h1 {
+            font-size: clamp(24px, 4vw, 32px);
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            word-wrap: break-word;
+        }
+
+        .header-content p {
+            font-size: clamp(14px, 2vw, 18px);
+            opacity: 0.9;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .school-name {
+            font-size: clamp(12px, 1.5vw, 14px);
+            color: #bdc3c7;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .date-time {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: clamp(14px, 2vw, 18px);
+            width: 100%;
+        }
+
+        .date-time div {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .main-content {
+            padding: clamp(20px, 3vw, 40px);
+            text-align: center;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 992px) {
+            .content-wrapper {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-container, .data-container {
+            background: #fff;
+            border-radius: var(--border-radius);
+            padding: clamp(20px, 3vw, 30px);
+            box-shadow: var(--shadow);
+            text-align: left;
+            height: fit-content;
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+            font-size: clamp(20px, 2.5vw, 24px);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--light-color);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background: white;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 576px) {
+            .radio-group {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: var(--transition);
+            background: var(--light-color);
+        }
+        
+        .radio-option:hover {
+            border-color: var(--primary-color);
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+        
+        .radio-option input {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .status-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .hadir { background-color: var(--success-color); }
+        .izin { background-color: var(--warning-color); }
+        .sakit { background-color: var(--info-color); }
+        .alpha { background-color: var(--danger-color); }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 576px) {
+            .button-group {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: clamp(14px, 1.5vw, 17px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(41, 128, 185, 0.3);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, var(--gray-color) 0%, #7f8c8d 100%);
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #6c7575 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(127, 140, 141, 0.3);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #219653 100%);
+            color: white;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .export-btn:hover {
+            background: linear-gradient(135deg, #219653 0%, #1e8749 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(33, 150, 83, 0.3);
+        }
+
+        .clear-data-btn {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%);
+            color: white;
+            margin-top: 10px;
+            width: 100%;
+            display: none;
+        }
+        
+        .clear-data-btn:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(192, 57, 43, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            border: 2px solid #e0e0e0;
+            margin-top: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%);
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: clamp(12px, 1.5vw, 15px);
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 3px solid var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: clamp(12px, 1.5vw, 15px);
+            word-break: break-word;
+        }
+        
+        tr:hover {
+            background-color: var(--light-color);
+        }
+
+        /* Nama merah untuk hadir lewat jam 07:30 */
+        .late-attendance {
+            color: var(--danger-color);
+            font-weight: 600;
+            background-color: #ffeaea;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: clamp(12px, 1.5vw, 14px);
+            font-weight: 700;
+            color: white;
+            display: inline-block;
+            text-align: center;
+            min-width: 60px;
+            white-space: nowrap;
+        }
+        
+        .badge-hadir { background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%); }
+        .badge-izin { background: linear-gradient(135deg, var(--warning-color) 0%, #d68910 100%); }
+        .badge-sakit { background: linear-gradient(135deg, var(--info-color) 0%, #2980b9 100%); }
+        .badge-alpha { background: linear-gradient(135deg, var(--danger-color) 0%, #c0392b 100%); }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%);
+            border-radius: var(--border-radius);
+            border: 2px solid #e0e0e0;
+        }
+
+        @media (min-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .stat-value {
+            font-size: clamp(24px, 3vw, 36px);
+            font-weight: 800;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: clamp(10px, 1.2vw, 13px);
+            color: var(--gray-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .notes-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .empty-data {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-color);
+            font-style: italic;
+            font-size: clamp(14px, 2vw, 18px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--gray-color);
+            font-size: clamp(12px, 1.5vw, 14px);
+            border-top: 2px solid #e0e0e0;
+            background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%);
+            line-height: 1.4;
+        }
+
+        /* Kelas Catalog */
+        .class-catalog {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%);
+            border-radius: var(--border-radius);
+            border: 2px solid #e0e0e0;
+        }
+
+        .catalog-title {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: clamp(18px, 2vw, 22px);
+        }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .class-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+
+        .class-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #e0e0e0;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: clamp(14px, 1.5vw, 16px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+        }
+
+        .class-item:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .class-item.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .class-count {
+            display: block;
+            font-size: clamp(10px, 1.2vw, 12px);
+            margin-top: 5px;
+            color: var(--gray-color);
+            font-weight: normal;
+        }
+
+        .class-item:hover .class-count,
+        .class-item.active .class-count {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Modal untuk data kelas spesifik */
+        .class-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .class-modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .class-modal-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .class-modal-title {
+            font-size: clamp(18px, 2vw, 24px);
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .class-modal-body {
+            padding: 20px;
+            max-height: calc(90vh - 100px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .class-table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-top: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .class-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 576px) {
+            .class-stats {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .class-stat-box {
+            text-align: center;
+            padding: 12px;
+            background: var(--light-color);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .class-stat-value {
+            font-size: clamp(20px, 2.5vw, 24px);
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        
+        .class-stat-label {
+            font-size: clamp(10px, 1.2vw, 12px);
+            color: var(--gray-color);
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Mobile Navigation Helper */
+        .mobile-helper {
+            display: none;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 576px) {
+            .mobile-helper {
+                display: block;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 15px;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .form-container, .data-container {
+                padding: 15px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+            
+            .status-badge {
+                padding: 4px 8px;
+                font-size: 11px;
+                min-width: 50px;
+            }
+            
+            .class-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .class-item {
+                padding: 10px;
+                min-height: 70px;
+            }
+            
+            .date-time {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .date-time div {
+                min-width: 100%;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        button, .radio-option, .class-item {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        input, select, textarea, button {
+            font-size: 16px; /* Prevent zoom on iOS */
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                max-height: 350px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            label {
+                font-size: 14px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            button, .class-catalog, footer, .mobile-helper {
+                display: none !important;
+            }
+            
+            .table-container {
+                max-height: none;
+                overflow: visible;
+                border: none;
+            }
+            
+            table {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="mobile-helper">
+            📱 Geser untuk melihat semua data tabel
+        </div>
+        
+        <header>
+            <div class="header-content">
+                <div class="title-container">
+                    <h1>📋 Sistem Absensi Kehadiran</h1>
+                    <p>SMAN 1 TARAKAN - Tahun Pelajaran 2023/2024</p>
+                    <div class="date-time">
+                        <div id="currentDate">Tanggal: -</div>
+                        <div id="currentTime">Waktu: -</div>
+                    </div>
+                    <div class="school-name">SMA NEGERI 1 TARAKAN</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div class="form-container">
+                    <h2 class="section-title">Form Absensi Siswa</h2>
+                    <form id="attendanceForm">
+                        <div class="form-group">
+                            <label for="name">Nama Lengkap Siswa</label>
+                            <input type="text" id="name" placeholder="Masukkan nama lengkap siswa" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="idNumber">Nomor Induk Siswa (NIS)</label>
+                            <input type="number" id="idNumber" placeholder="Masukkan NIS (angka saja)" required min="10000" max="9999999999">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">Kelas</label>
+                            <select id="department" required>
+                                <option value="">Pilih Kelas</option>
+                                <!-- Kelas X A-L -->
+                                <optgroup label="Kelas X">
+                                    <option value="X-A">X-A</option>
+                                    <option value="X-B">X-B</option>
+                                    <option value="X-C">X-C</option>
+                                    <option value="X-D">X-D</option>
+                                    <option value="X-E">X-E</option>
+                                    <option value="X-F">X-F</option>
+                                    <option value="X-G">X-G</option>
+                                    <option value="X-H">X-H</option>
+                                    <option value="X-I">X-I</option>
+                                    <option value="X-J">X-J</option>
+                                    <option value="X-K">X-K</option>
+                                    <option value="X-L">X-L</option>
+                                </optgroup>
+                                <!-- Kelas XI A-L -->
+                                <optgroup label="Kelas XI">
+                                    <option value="XI-A">XI-A</option>
+                                    <option value="XI-B">XI-B</option>
+                                    <option value="XI-C">XI-C</option>
+                                    <option value="XI-D">XI-D</option>
+                                    <option value="XI-E">XI-E</option>
+                                    <option value="XI-F">XI-F</option>
+                                    <option value="XI-G">XI-G</option>
+                                    <option value="XI-H">XI-H</option>
+                                    <option value="XI-I">XI-I</option>
+                                    <option value="XI-J">XI-J</option>
+                                    <option value="XI-K">XI-K</option>
+                                    <option value="XI-L">XI-L</option>
+                                </optgroup>
+                                <!-- Kelas XII A-K -->
+                                <optgroup label="Kelas XII">
+                                    <option value="XII-A">XII-A</option>
+                                    <option value="XII-B">XII-B</option>
+                                    <option value="XII-C">XII-C</option>
+                                    <option value="XII-D">XII-D</option>
+                                    <option value="XII-E">XII-E</option>
+                                    <option value="XII-F">XII-F</option>
+                                    <option value="XII-G">XII-G</option>
+                                    <option value="XII-H">XII-H</option>
+                                    <option value="XII-I">XII-I</option>
+                                    <option value="XII-J">XII-J</option>
+                                    <option value="XII-K">XII-K</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status Kehadiran</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="hadir" name="status" value="Hadir" checked>
+                                    <label for="hadir"><span class="status-icon hadir"></span>Hadir</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="izin" name="status" value="Izin">
+                                    <label for="izin"><span class="status-icon izin"></span>Izin</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="sakit" name="status" value="Sakit">
+                                    <label for="sakit"><span class="status-icon sakit"></span>Sakit</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="alpha" name="status" value="Alpha">
+                                    <label for="alpha"><span class="status-icon alpha"></span>Alpha</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group notes-container" id="notesContainer">
+                            <label for="notes">Alasan Izin</label>
+                            <textarea id="notes" placeholder="Silakan jelaskan alasan izin..."></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit" class="submit-btn" id="submitBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Simpan Absensi
+                            </button>
+                            <button type="button" class="reset-btn" id="resetBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 7L7 19M7 7L19 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Reset Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="data-container">
+                    <h2 class="section-title">Data Absensi Hari Ini</h2>
+                    <div class="table-container">
+                        <table id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>NIS</th>
+                                    <th>Kelas</th>
+                                    <th>Status</th>
+                                    <th>Catatan</th>
+                                    <th>Waktu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <!-- Data akan dimasukkan melalui JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="totalAttendance">0</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="presentCount">0</div>
+                            <div class="stat-label">Hadir</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="permitCount">0</div>
+                            <div class="stat-label">Izin</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="sickCount">0</div>
+                            <div class="stat-label">Sakit</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="absentCount">0</div>
+                            <div class="stat-label">Alpha</div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="export-btn" id="exportBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8M14 2L20 8M14 2V8H20M12 18V12M9 15H15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Export ke Excel
+                    </button>
+
+                    <button type="button" class="clear-data-btn" id="clearDataBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 7L7 19M7 7L19 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Hapus Data Hari Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Katalog Kelas -->
+            <div class="class-catalog">
+                <h3 class="catalog-title">📚 Katalog Kelas</h3>
+                <div class="class-grid" id="classCatalog">
+                    <!-- Kelas akan dimasukkan melalui JavaScript -->
+                </div>
+            </div>
+        </div>  
+
+        <footer>
+            <p>Sistem Absensi Kehadiran Siswa &copy; <span id="currentYear">2023</span> - SMAN 1 TARAKAN</p>
+            <p>Data absensi disimpan di penyimpanan lokal browser | Reset otomatis setiap hari</p>
+        </footer>
+    </div>
+
+    <!-- Modal untuk Data Kelas Spesifik -->
+    <div class="class-modal" id="classModal">
+        <div class="class-modal-content">
+            <div class="class-modal-header">
+                <h3 class="class-modal-title" id="classModalTitle">Data Kelas</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="class-modal-body">
+                <div class="class-stats" id="classStats">
+                    <!-- Statistik kelas akan dimasukkan melalui JavaScript -->
+                </div>
+                <div class="class-table-container">
+                    <table id="classSpecificTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIS</th>
+                                <th>Status</th>
+                                <th>Catatan</th>
+                                <th>Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classSpecificTableBody">
+                            <!-- Data spesifik kelas akan dimasukkan melalui JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update tanggal dan waktu
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Format tanggal
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('id-ID', optionsDate);
+            
+            // Format waktu
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const formattedTime = `${hours}:${minutes}:${seconds}`;
+            
+            document.getElementById('currentDate').textContent = `Tanggal: ${formattedDate}`;
+            document.getElementById('currentTime').textContent = `Waktu: ${formattedTime}`;
+        }
+        
+        // Update tahun di footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Inisialisasi data absensi dengan system reset harian
+        function initializeAttendanceData() {
+            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+            const storedData = localStorage.getItem('attendanceData');
+            const storedDate = localStorage.getItem('attendanceDate');
+            
+            // Jika belum ada data atau hari berbeda, reset data
+            if (!storedData || storedDate !== today) {
+                console.log('Reset data untuk hari baru:', today);
+                localStorage.setItem('attendanceData', JSON.stringify([]));
+                localStorage.setItem('attendanceDate', today);
+                return [];
+            }
+            
+            // Jika hari sama, load data yang ada
+            try {
+                return JSON.parse(storedData);
+            } catch (e) {
+                console.error('Error parsing attendance data:', e);
+                localStorage.setItem('attendanceData', JSON.stringify([]));
+                localStorage.setItem('attendanceDate', today);
+                return [];
+            }
+        }
+        
+        let attendanceData = initializeAttendanceData();
+        
+        // Tampilkan tombol hapus data jika ada data
+        function updateClearDataButton() {
+            const clearBtn = document.getElementById('clearDataBtn');
+            if (attendanceData.length > 0) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
+        
+        // Fungsi sorting otomatis: Hadir -> Izin -> Sakit -> Alpha, diurutkan A-Z
+        function sortAttendanceData(data) {
+            // Urutan prioritas status
+            const statusOrder = { 'Hadir': 1, 'Izin': 2, 'Sakit': 3, 'Alpha': 4 };
+            
+            return data.sort((a, b) => {
+                // Urutkan berdasarkan status
+                if (statusOrder[a.status] !== statusOrder[b.status]) {
+                    return statusOrder[a.status] - statusOrder[b.status];
+                }
+                
+                // Jika status sama, urutkan berdasarkan nama A-Z
+                return a.name.localeCompare(b.name);
+            });
+        }
+        
+        // Fungsi untuk cek apakah telat (melewati jam 07:30)
+        function isLate(timeString) {
+            if (!timeString) return false;
+            
+            const [hours, minutes] = timeString.split(':').map(Number);
+            // Cek jika waktu lebih dari 07:30
+            return hours > 7 || (hours === 7 && minutes > 30);
+        }
+        
+        // Render data absensi ke tabel
+        function renderAttendanceData() {
+            const tableBody = document.getElementById('attendanceTableBody');
+            tableBody.innerHTML = '';
+            
+            // Reset statistik
+            let presentCount = 0;
+            let permitCount = 0;
+            let sickCount = 0;
+            let absentCount = 0;
+            
+            // Sort data sebelum render
+            const sortedData = sortAttendanceData([...attendanceData]);
+            
+            // Jika tidak ada data
+            if (sortedData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-data">Belum ada data absensi hari ini</td>
+                    </tr>`;
+            } else {
+                // Render setiap data
+                sortedData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Tentukan kelas badge berdasarkan status
+                    let badgeClass = '';
+                    if (item.status === 'Hadir') {
+                        badgeClass = 'badge-hadir';
+                        presentCount++;
+                    } else if (item.status === 'Izin') {
+                        badgeClass = 'badge-izin';
+                        permitCount++;
+                    } else if (item.status === 'Sakit') {
+                        badgeClass = 'badge-sakit';
+                        sickCount++;
+                    } else if (item.status === 'Alpha') {
+                        badgeClass = 'badge-alpha';
+                        absentCount++;
+                    }
+                    
+                    // Tampilkan catatan hanya jika ada
+                    const notesDisplay = item.notes ? item.notes : '-';
+                    
+                    // Cek apakah telat untuk status Hadir
+                    const isLateAttendance = item.status === 'Hadir' && isLate(item.time);
+                    const nameDisplay = isLateAttendance ? 
+                        `<span class="late-attendance">${item.name}</span>` : 
+                        item.name;
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${nameDisplay}</td>
+                        <td>${item.idNumber}</td>
+                        <td>${item.department}</td>
+                        <td><span class="status-badge ${badgeClass}">${item.status}</span></td>
+                        <td>${notesDisplay}</td>
+                        <td>${item.time}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Update statistik
+            document.getElementById('totalAttendance').textContent = sortedData.length;
+            document.getElementById('presentCount').textContent = presentCount;
+            document.getElementById('permitCount').textContent = permitCount;
+            document.getElementById('sickCount').textContent = sickCount;
+            document.getElementById('absentCount').textContent = absentCount;
+            
+            // Update tombol hapus data
+            updateClearDataButton();
+        }
+        
+        // Render katalog kelas
+        function renderClassCatalog() {
+            const classCatalog = document.getElementById('classCatalog');
+            
+            // Daftar semua kelas sesuai permintaan
+            const classes = [
+                // Kelas X A-L
+                'X-A', 'X-B', 'X-C', 'X-D', 'X-E', 'X-F', 
+                'X-G', 'X-H', 'X-I', 'X-J', 'X-K', 'X-L',
+                // Kelas XI A-L
+                'XI-A', 'XI-B', 'XI-C', 'XI-D', 'XI-E', 'XI-F',
+                'XI-G', 'XI-H', 'XI-I', 'XI-J', 'XI-K', 'XI-L',
+                // Kelas XII A-K
+                'XII-A', 'XII-B', 'XII-C', 'XII-D', 'XII-E', 'XII-F',
+                'XII-G', 'XII-H', 'XII-I', 'XII-J', 'XII-K'
+            ];
+            
+            classCatalog.innerHTML = '';
+            
+            // Urutkan kelas: X dulu, kemudian XI, kemudian XII
+            classes.sort((a, b) => {
+                const levelA = a.startsWith('XII') ? 3 : a.startsWith('XI') ? 2 : 1;
+                const levelB = b.startsWith('XII') ? 3 : b.startsWith('XI') ? 2 : 1;
+                
+                if (levelA !== levelB) return levelA - levelB;
+                return a.localeCompare(b);
+            });
+            
+            classes.forEach(className => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.innerHTML = `
+                    ${className}
+                    <span class="class-count" id="count-${className.replace('-', '')}"></span>
+                `;
+                classItem.dataset.class = className;
+                
+                // Hitung jumlah siswa per kelas
+                const classData = attendanceData.filter(item => item.department === className);
+                const studentCount = classData.length;
+                const countElement = classItem.querySelector(`#count-${className.replace('-', '')}`);
+                
+                if (studentCount > 0) {
+                    countElement.textContent = `${studentCount} siswa`;
+                } else {
+                    countElement.textContent = '0 siswa';
+                }
+                
+                // Event listener untuk membuka modal dengan data spesifik kelas
+                classItem.addEventListener('click', function() {
+                    const selectedClass = this.dataset.class;
+                    openClassModal(selectedClass);
+                });
+                
+                classCatalog.appendChild(classItem);
+            });
+        }
+        
+        // Buka modal dengan data spesifik kelas
+        function openClassModal(className) {
+            const modal = document.getElementById('classModal');
+            const modalTitle = document.getElementById('classModalTitle');
+            const classStats = document.getElementById('classStats');
+            const tableBody = document.getElementById('classSpecificTableBody');
+            
+            // Filter data untuk kelas tertentu
+            const classData = attendanceData.filter(item => item.department === className);
+            
+            // Set judul modal
+            modalTitle.textContent = `Data Absensi Kelas ${className}`;
+            
+            // Render statistik kelas
+            let presentCount = 0, permitCount = 0, sickCount = 0, absentCount = 0;
+            
+            classData.forEach(item => {
+                if (item.status === 'Hadir') presentCount++;
+                else if (item.status === 'Izin') permitCount++;
+                else if (item.status === 'Sakit') sickCount++;
+                else if (item.status === 'Alpha') absentCount++;
+            });
+            
+            classStats.innerHTML = `
+                <div class="class-stat-box">
+                    <div class="class-stat-value">${classData.length}</div>
+                    <div class="class-stat-label">Total</div>
+                </div>
+                <div class="class-stat-box">
+                    <div class="class-stat-value">${presentCount}</div>
+                    <div class="class-stat-label">Hadir</div>
+                </div>
+                <div class="class-stat-box">
+                    <div class="class-stat-value">${permitCount}</div>
+                    <div class="class-stat-label">Izin</div>
+                </div>
+                <div class="class-stat-box">
+                    <div class="class-stat-value">${sickCount}</div>
+                    <div class="class-stat-label">Sakit</div>
+                </div>
+                <div class="class-stat-box">
+                    <div class="class-stat-value">${absentCount}</div>
+                    <div class="class-stat-label">Alpha</div>
+                </div>
+            `;
+            
+            // Render tabel data kelas
+            tableBody.innerHTML = '';
+            
+            if (classData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-data" style="text-align: center; padding: 30px;">
+                            Belum ada data absensi untuk kelas ${className}
+                        </td>
+                    </tr>`;
+            } else {
+                // Sort data kelas
+                const sortedClassData = sortAttendanceData([...classData]);
+                
+                sortedClassData.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Tentukan kelas badge berdasarkan status
+                    let badgeClass = '';
+                    if (item.status === 'Hadir') badgeClass = 'badge-hadir';
+                    else if (item.status === 'Izin') badgeClass = 'badge-izin';
+                    else if (item.status === 'Sakit') badgeClass = 'badge-sakit';
+                    else if (item.status === 'Alpha') badgeClass = 'badge-alpha';
+                    
+                    // Cek apakah telat untuk status Hadir
+                    const isLateAttendance = item.status === 'Hadir' && isLate(item.time);
+                    const nameDisplay = isLateAttendance ? 
+                        `<span class="late-attendance">${item.name}</span>` : 
+                        item.name;
+                    
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${nameDisplay}</td>
+                        <td>${item.idNumber}</td>
+                        <td><span class="status-badge ${badgeClass}">${item.status}</span></td>
+                        <td>${item.notes || '-'}</td>
+                        <td>${item.time}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Tampilkan modal
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+        }
+        
+        // Tutup modal
+        function closeClassModal() {
+            const modal = document.getElementById('classModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+        
+        // Fungsi export ke Excel
+        function exportToExcel() {
+            if (attendanceData.length === 0) {
+                alert('Tidak ada data absensi untuk diexport!');
+                return;
+            }
+            
+            try {
+                // Siapkan data untuk Excel
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('id-ID').replace(/\//g, '-');
+                const fileName = `Absensi_SMAN1_Tarakan_${formattedDate}.csv`;
+                
+                // Buat header CSV dengan BOM untuk encoding UTF-8
+                let csvContent = '\ufeff'; // UTF-8 BOM
+                csvContent += "No,Nama,NIS,Kelas,Status,Catatan,Waktu,Tanggal,Keterlambatan\n";
+                
+                // Tambahkan setiap baris data
+                attendanceData.forEach((item, index) => {
+                    const isLateAttendance = item.status === 'Hadir' && isLate(item.time);
+                    const keterlambatan = isLateAttendance ? 'Terlambat' : 'Tepat Waktu';
+                    
+                    // Fungsi untuk escape CSV dengan benar
+                    const escapeCsv = (str) => {
+                        if (str === null || str === undefined) return '';
+                        str = String(str);
+                        // Jika mengandung koma, quote, atau newline, wrap dengan quotes
+                        if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+                            // Escape quotes dengan menggandakan mereka
+                            str = str.replace(/"/g, '""');
+                            return '"' + str + '"';
+                        }
+                        return str;
+                    };
+                    
+                    const rowData = [
+                        index + 1,
+                        escapeCsv(item.name),
+                        escapeCsv(item.idNumber),
+                        escapeCsv(item.department),
+                        escapeCsv(item.status),
+                        escapeCsv(item.notes || ''),
+                        escapeCsv(item.time),
+                        escapeCsv(item.date),
+                        escapeCsv(keterlambatan)
+                    ];
+                    
+                    csvContent += rowData.join(',') + '\n';
+                });
+                
+                // Buat blob dengan charset UTF-8
+                const blob = new Blob([csvContent], { 
+                    type: 'text/csv;charset=utf-8;' 
+                });
+                
+                // Buat link download
+                const link = document.createElement('a');
+                
+                if (navigator.msSaveBlob) { // Untuk IE 10+
+                    navigator.msSaveBlob(blob, fileName);
+                } else {
+                    const url = URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = fileName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Cleanup
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                }
+                
+                alert(`✅ Data berhasil diexport!\nFile: ${fileName}\n\nTips: Buka file dengan Microsoft Excel atau Google Sheets.`);
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Terjadi kesalahan saat mengexport data. Silakan coba lagi.');
+            }
+        }
+        
+        // Hapus data hari ini
+        function clearTodayData() {
+            if (attendanceData.length === 0) {
+                alert('Tidak ada data untuk dihapus!');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            const confirmDelete = confirm(`Apakah Anda yakin ingin menghapus semua data absensi hari ini (${today})?\n\nTotal data: ${attendanceData.length} siswa\n\n⚠️ Aksi ini tidak dapat dibatalkan!`);
+            
+            if (confirmDelete) {
+                // Reset data untuk hari ini
+                attendanceData = [];
+                localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+                
+                // Render ulang
+                renderAttendanceData();
+                renderClassCatalog();
+                
+                alert('✅ Semua data absensi hari ini telah dihapus!');
+            }
+        }
+        
+        // Tampilkan/sembunyikan catatan berdasarkan status yang dipilih
+        function toggleNotesVisibility() {
+            const notesContainer = document.getElementById('notesContainer');
+            const selectedStatus = document.querySelector('input[name="status"]:checked').value;
+            
+            if (selectedStatus === 'Izin') {
+                notesContainer.style.display = 'block';
+                document.getElementById('notes').setAttribute('required', 'true');
+            } else {
+                notesContainer.style.display = 'none';
+                document.getElementById('notes').removeAttribute('required');
+                document.getElementById('notes').value = ''; // Kosongkan catatan
+            }
+        }
+        
+        // Handle form submission
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Ambil nilai dari form
+            const name = document.getElementById('name').value.trim();
+            const idNumber = document.getElementById('idNumber').value.trim();
+            const department = document.getElementById('department').value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+            const notes = document.getElementById('notes').value.trim();
+            
+            // Validasi
+            if (!name || !idNumber || !department) {
+                alert('Harap lengkapi semua field yang wajib diisi!');
+                return;
+            }
+            
+            // Validasi NIS harus angka
+            if (isNaN(idNumber) || idNumber.length < 5) {
+                alert('NIS harus berupa angka minimal 5 digit!');
+                document.getElementById('idNumber').focus();
+                return;
+            }
+            
+            // Validasi khusus untuk izin
+            if (status === 'Izin' && !notes) {
+                alert('Harap isi alasan izin!');
+                document.getElementById('notes').focus();
+                return;
+            }
+            
+            // Cek apakah NIS sudah ada di data hari ini
+            const today = new Date().toISOString().split('T')[0];
+            const existingEntry = attendanceData.find(item => 
+                item.idNumber === idNumber && item.date === today
+            );
+            
+            if (existingEntry) {
+                alert(`Siswa dengan NIS ${idNumber} sudah melakukan absensi hari ini!`);
+                return;
+            }
+            
+            // Waktu saat ini
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const time = `${hours}:${minutes}`;
+            
+            // Buat objek data absensi
+            const attendanceRecord = {
+                name,
+                idNumber,
+                department,
+                status,
+                notes: status === 'Izin' ? notes : '',
+                time,
+                date: today
+            };
+            
+            // Tambahkan ke array data
+            attendanceData.push(attendanceRecord);
+            
+            // Simpan ke localStorage
+            localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
+            
+            // Render ulang data
+            renderAttendanceData();
+            renderClassCatalog();
+            
+            // Reset form
+            document.getElementById('attendanceForm').reset();
+            document.getElementById('hadir').checked = true;
+            toggleNotesVisibility();
+            
+            // Tampilkan pesan sukses
+            alert(`✅ Absensi berhasil disimpan!\nNama: ${name}\nKelas: ${department}\nStatus: ${status}`);
+            
+            // Scroll ke data section pada mobile
+            if (window.innerWidth <= 768) {
+                document.querySelector('.data-container').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        });
+        
+        // Reset form
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin mereset form?')) {
+                document.getElementById('attendanceForm').reset();
+                document.getElementById('hadir').checked = true;
+                toggleNotesVisibility();
+            }
+        });
+        
+        // Event listeners
+        document.getElementById('exportBtn').addEventListener('click', exportToExcel);
+        document.getElementById('clearDataBtn').addEventListener('click', clearTodayData);
+        document.getElementById('closeModal').addEventListener('click', closeClassModal);
+        
+        // Tutup modal ketika klik di luar konten modal
+        document.getElementById('classModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeClassModal();
+            }
+        });
+        
+        // Tutup modal dengan escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeClassModal();
+            }
+        });
+        
+        // Event listener untuk radio button status
+        document.querySelectorAll('input[name="status"]').forEach(radio => {
+            radio.addEventListener('change', toggleNotesVisibility);
+        });
+        
+        // Prevent form zoom on iOS
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Inisialisasi
+        updateDateTime();
+        renderAttendanceData();
+        renderClassCatalog();
+        toggleNotesVisibility();
+        
+        // Update waktu setiap detik
+        setInterval(updateDateTime, 1000);
+        
+        // Cek reset harian setiap 5 menit
+        setInterval(() => {
+            const today = new Date().toISOString().split('T')[0];
+            const storedDate = localStorage.getItem('attendanceDate');
+            
+            if (storedDate !== today) {
+                console.log('Hari baru terdeteksi, reset data...');
+                attendanceData = initializeAttendanceData();
+                renderAttendanceData();
+                renderClassCatalog();
+            }
+        }, 5 * 60 * 1000); // 5 menit
+        
+        // Handle orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                renderAttendanceData();
+                renderClassCatalog();
+            }, 100);
+        });
+        
+        // Handle resize
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                renderAttendanceData();
+                renderClassCatalog();
+            }, 250);
+        });
+        
+    </script>
+</body>
+</html>
